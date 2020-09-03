@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 
 class News{
 
@@ -172,6 +173,125 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.arrow_forward_ios), 
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
 
+                        String writer = _newsInApp[index].author;
+                        String date = _newsInApp[index].date;
+
+                          return MaterialApp(
+                            debugShowCheckedModeBanner: false,
+                            home: Scaffold(
+                              appBar: AppBar(
+                                centerTitle: true,
+                                backgroundColor: Colors.white,
+
+                                leading: IconButton(
+                                  color: Colors.blue,
+                                  iconSize: 16,
+                                  icon: Icon(Icons.arrow_back_ios),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+
+                                title: Text(
+                                  _newsInApp[index].title,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ),
+
+                              body: SingleChildScrollView(
+                                child: Center(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        height: 220,
+                                        width: 400,
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: Image.network(
+                                          _newsInApp[index].image,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+
+                                      ListTile(
+                                        title: Container(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                _newsInApp[index].title,
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15
+                                                ),
+                                                textAlign: TextAlign.left,
+                                              ),
+
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+
+                                              Text(
+                                                _newsInApp[index].publisher,
+                                                style: TextStyle(
+                                                  color: Colors.black26
+                                                ),
+                                              ),
+
+                                              SizedBox(
+                                                height: 12,
+                                              ),
+
+                                              Text(
+                                                _newsInApp[index].text,
+                                                style: TextStyle(
+                                                  wordSpacing: 2
+                                                ),
+                                                textAlign: TextAlign.justify,
+                                              ),
+
+                                               SizedBox(
+                                                height: 12,
+                                              ),
+
+                                              Text('Author : $writer'),
+
+                                              SizedBox(
+                                                height: 12,
+                                              ),
+
+                                              Text('Date: $date'),
+
+                                              SizedBox(
+                                                height: 12,
+                                              ),
+                                              Text('Full story at: '),
+
+                                              InkWell(
+                                                child: Text(
+                                                  _newsInApp[index].url,
+                                                  style: TextStyle(
+                                                    color: Colors.blue
+                                                  ),
+                                                ),
+                                                onTap: () async {
+                                                  if(await canLaunch(_newsInApp[index].url)){
+                                                    await launch(_newsInApp[index].url);
+                                                  }
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          );
                     }))
                   ),
                 ),
